@@ -43,11 +43,8 @@ def upload_file():
 
         corpus_raw = u""
         for book_filename in book_filenames:
-            print("Reading '{0}'...".format(book_filename))
             with codecs.open(book_filename, "r", "utf-8") as book_file:
                 corpus_raw += book_file.read()
-            print("Corpus is now {0} characters long".format(len(corpus_raw)))
-            print()
 
         tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
         raw_sentences = tokenizer.tokenize(corpus_raw)
