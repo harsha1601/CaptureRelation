@@ -87,15 +87,11 @@ def test():
     capt_rel = w2v.Word2Vec.load(os.path.join("trained", "capt_rel.w2v"))
         
     similarities = capt_rel.most_similar_cosmul(
-        positive=[request.form['word3'], request.form['word1']],
-        negative=[request.form['word2']]
+        positive=[request.form['Word_3'], request.form['Word_1']],
+        negative=[request.form['Word_2']]
     )
     start2 = similarities[0][0]
     return render_template('display.html',name=start2)
 
 if __name__ == "__main__":
-	app.run(
-        host="0.0.0.0",
-        port=int("5000"),
-        debug=True
-    )
+	app.run()
