@@ -18,7 +18,7 @@ from flask import send_from_directory
 nltk.download("punkt")
 nltk.download("stopwords")
 
-UPLOAD_FOLDER = '/home/harsha/Downloads/codefd/files'
+UPLOAD_FOLDER = '/home/harsha/files'
 ALLOWED_EXTENSIONS = set(['pdf','txt'])
 
 app = Flask(__name__)
@@ -45,11 +45,8 @@ def upload_file():
 
     corpus_raw = u""
     for book_filename in book_filenames:
-        print("Reading '{0}'...".format(book_filename))
-        with codecs.open(book_filename, "r", "utf-8") as book_file:
-            corpus_raw += book_file.read()
-        print("Corpus is now {0} characters long".format(len(corpus_raw)))
-        print()
+    	with codecs.open(book_filename, "r", "utf-8") as book_file:
+    		corpus_raw += book_file.read()
 
     tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
     raw_sentences = tokenizer.tokenize(corpus_raw)
@@ -69,7 +66,7 @@ def upload_file():
     downsampling = 0.5*1e-5            		
     num_workers = multiprocessing.cpu_count()
     seed = 1
-    maha2vec = w2v.Word2Vec(
+    capt_rel = w2v.Word2Vec(
         sg=1,
         seed=seed,
         workers=num_workers,
@@ -78,18 +75,18 @@ def upload_file():
         window=context_size,
         sample=downsampling
     )
-    maha2vec.build_vocab(sentences)
-    maha2vec.train(sentences,total_examples=maha2vec.corpus_count, epochs=maha2vec.iter)
+    capt_rel.build_vocab(sentences)
+    capt_rel.train(sentences,total_examples=capt_rel.corpus_count, epochs=capt_rel.iter)
     if not os.path.exists("trained"):
         os.makedirs("trained")
-    maha2vec.save(os.path.join("trained", "maha2vec.w2v"))		
+    capt_rel.save(os.path.join("trained", "capt_rel.w2v"))		
     return  render_template('upload.html')
 
 @app.route('/display', methods=['POST'])
 def test():
-    maha2vec = w2v.Word2Vec.load(os.path.join("trained", "maha2vec.w2v"))
+    capt_rel = w2v.Word2Vec.load(os.path.join("trained", "capt_rel.w2v"))
         
-    similarities = maha2vec.most_similar_cosmul(
+    similarities = capt_rel.most_similar_cosmul(
         positive=[request.form['word3'], request.form['word1']],
         negative=[request.form['word2']]
     )
