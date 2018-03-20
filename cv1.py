@@ -18,7 +18,7 @@ from flask import send_from_directory
 nltk.download("punkt")
 nltk.download("stopwords")
 
-UPLOAD_FOLDER = '/home/harsha/files'
+UPLOAD_FOLDER = '/home/harsha/CaptureRelation/files'
 ALLOWED_EXTENSIONS = set(['pdf','txt'])
 
 app = Flask(__name__)
